@@ -29,8 +29,6 @@ MIN_USER_ID = 1
 MAX_USER_ID = 10_000_000
 MIN_LECTURE_ID = 1
 MAX_LECTURE_ID = 10_000_000
-MIN_ORDER_ID = 1
-MAX_ORDER_ID = 10_000_000
 MIN_AMOUNT = 10_000
 MAX_AMOUNT = 1_000_000
 AMOUNT_UNIT = 10_000
@@ -38,7 +36,8 @@ AMOUNT_UNIT = 10_000
 
 class EventGenerator:
     def __init__(self):
-        self._open_orders: list[tuple] = []
+        self._open_orders: dict[int, tuple] = {}
+        self._next_order_id = 1
 
     def generate(self, event_type: EventType = None) -> dict:
         if event_type is None:
@@ -83,20 +82,26 @@ class EventGenerator:
         }
 
     def _purchase_complete_context(self) -> dict:
-        context = {
-            "order_id": random.randint(MIN_ORDER_ID, MAX_ORDER_ID),
-            "user_id": random.randint(MIN_USER_ID, MAX_USER_ID),
-            "lecture_id": random.randint(MIN_LECTURE_ID, MAX_LECTURE_ID),
-            "amount": random.randrange(MIN_AMOUNT, MAX_AMOUNT, AMOUNT_UNIT),
-            "payment_method": random.choice(list(PaymentMethod)).value,
+        order_id = self._next_order_id
+        self._next_order_id += 1
+
+        user_id = random.randint(MIN_USER_ID, MAX_USER_ID)
+        lecture_id = random.randint(MIN_LECTURE_ID, MAX_LECTURE_ID)
+        amount = random.randrange(MIN_AMOUNT, MAX_AMOUNT, AMOUNT_UNIT)
+        payment_method = random.choice(list(PaymentMethod)).value
+
+        self._open_orders[order_id] = (user_id, lecture_id, amount, payment_method)
+        return {
+            "order_id": order_id,
+            "user_id": user_id,
+            "lecture_id": lecture_id,
+            "amount": amount,
+            "payment_method": payment_method,
         }
-        self._open_orders.append(
-            (context["order_id"], context["user_id"], context["lecture_id"], context["amount"])
-        )
-        return context
 
     def _purchase_cancel_context(self) -> dict:
-        order_id, user_id, lecture_id, amount = self._open_orders.pop(random.randrange(len(self._open_orders)))
+        order_id = random.choice(list(self._open_orders.keys()))
+        user_id, lecture_id, amount, payment_method = self._open_orders.pop(order_id)
         return {
             "order_id": order_id,
             "user_id": user_id,
