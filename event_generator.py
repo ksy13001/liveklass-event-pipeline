@@ -39,9 +39,11 @@ class EventGenerator:
         self._open_orders: dict[int, tuple] = {}
         self._next_order_id = 1
 
-    def generate(self, event_type: EventType = None) -> dict:
+    def generate(self, event_type: EventType = None, timestamp: datetime = None) -> dict:
         if event_type is None:
             event_type = self._pick_event_type()
+        if timestamp is None:
+            timestamp = datetime.now()
 
         event_type = self._resolve_event_type(event_type)
         context = self._resolve_context(event_type)
@@ -49,7 +51,7 @@ class EventGenerator:
         return {
             "event_id": str(uuid.uuid4()),
             "event_type": event_type.value,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": timestamp.strftime("%Y-%m-%d %H:%M:%S"),
             **context,
         }
 
