@@ -13,6 +13,10 @@ logging.basicConfig(
     ],
 )
 
+EVENT_INTERVAL_MIN = 0.05
+EVENT_INTERVAL_MAX = 0.2
+
+
 if __name__ == "__main__":
     generator = EventGenerator()
     conn = connect_db()
@@ -22,7 +26,7 @@ if __name__ == "__main__":
         while True:
             event = generator.generate()
             write_event(conn, event)
-            time.sleep(random.uniform(0.05, 0.2))
+            time.sleep(random.uniform(EVENT_INTERVAL_MIN, EVENT_INTERVAL_MAX))
     except KeyboardInterrupt:
         logging.info("Pipeline stopped")
     finally:
