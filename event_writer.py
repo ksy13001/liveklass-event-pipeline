@@ -47,6 +47,18 @@ def write_event(conn, event: dict):
             )
         conn.commit()
     except Exception as e:
-        logging.error(f"Error occurred while writing event: {e}")
+        logging.error(
+            f"event_write_failed "
+            f"event_id={event['event_id']} "
+            f"event_type={event['event_type']} "
+            f"user_id={event['user_id']} "
+            f"order_id={event['order_id']} "
+            f"lecture_id={event['lecture_id']} "
+            f"amount={event['amount']} "
+            f"payment_method={event['payment_method']} "
+            f"timestamp={event['timestamp']} "
+            f"errno={e.errno} "
+            f"error={e}"
+        )
         conn.rollback()
         raise
