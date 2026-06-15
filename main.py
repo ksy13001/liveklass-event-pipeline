@@ -1,0 +1,29 @@
+import logging
+import random
+import time
+from event_generator import EventGenerator
+from event_writer import connect_db, write_event
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("pipeline.log"),
+    ],
+)
+
+if __name__ == "__main__":
+    generator = EventGenerator()
+    conn = connect_db()
+    logging.info("Pipeline started")
+
+    try:
+        while True:
+            event = generator.generate()
+            write_event(conn, event)
+            time.sleep(random.uniform(0.05, 0.2))
+    except KeyboardInterrupt:
+        logging.info("Pipeline stopped")
+    finally:
+        conn.close()
