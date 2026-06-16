@@ -18,11 +18,11 @@ TOTAL_EVENTS = 100_000
 DAYS = 7
 
 HOURLY_WEIGHTS = [
-    1, 1, 1, 1, 1, 1,        # 00~05 새벽
-    2, 3, 4,                  # 06~08 출근 전
-    5, 5, 5, 4, 4, 5, 5, 5,  # 09~16 낮
-    4, 7, 9, 10, 9, 7,       # 17~22 퇴근 후 피크
-    4,                        # 23 심야
+    1, 1, 1, 1, 1, 1,    
+    2, 3, 4,                  
+    5, 5, 5, 4, 4, 5, 5, 5,  
+    4, 7, 9, 10, 9, 7,       
+    4,                        
 ]
 
 
@@ -32,7 +32,7 @@ def random_timestamp() -> datetime:
     base = datetime.now() - timedelta(days=days_ago)
     return base.replace(
         hour=hour,
-        minute=random.randint(0, 59),
+        minute=random.randint(0, 59), 
         second=random.randint(0, 59),
         microsecond=0,
     )
