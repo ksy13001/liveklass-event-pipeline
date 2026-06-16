@@ -32,6 +32,7 @@ MAX_LECTURE_ID = 10_000_000
 MIN_AMOUNT = 10_000
 MAX_AMOUNT = 1_000_000
 AMOUNT_UNIT = 10_000
+REFUND_AMOUNT_UNIT = 1_000
 
 
 class EventGenerator:
@@ -103,11 +104,13 @@ class EventGenerator:
 
     def _purchase_cancel_context(self) -> dict:
         order_id = random.choice(list(self._open_orders.keys()))
-        user_id, lecture_id, amount, payment_method = self._open_orders.pop(order_id)
+        user_id, lecture_id, original_amount, payment_method = self._open_orders.pop(order_id)
+        amount = random.randrange(original_amount//2, original_amount, REFUND_AMOUNT_UNIT)
+
         return {
             "order_id": order_id,
             "user_id": user_id,
             "lecture_id": lecture_id,
             "amount": amount,
-            "payment_method": None,
+            "payment_method": payment_method,
         }
