@@ -17,9 +17,19 @@ EVENT_INTERVAL_MIN = 0.05
 EVENT_INTERVAL_MAX = 0.2
 
 
+def connect_db_with_retry(retries: int = 10, delay: int = 3):
+    for i in range(retries):
+        try:
+            return connect_db()
+        except Exception as e:
+            logging.warning(f"DB not ready, retrying ({i + 1}/{retries}): {e}")
+            time.sleep(delay)
+    raise Exception("Failed to connect to DB after retries")
+
+
 if __name__ == "__main__":
     generator = EventGenerator()
-    conn = connect_db()
+    conn = connect_db_with_retry()
     logging.info("Pipeline started")
 
     try:
