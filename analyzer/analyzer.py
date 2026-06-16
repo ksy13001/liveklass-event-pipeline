@@ -154,17 +154,17 @@ def plot_daily_event_trend(conn):
 def plot_daily_revenue(conn):
     rows = execute_query(conn, DAILY_REVENUE_QUERY)
     dates = [r[0] for r in rows]
-    revenue = [r[1] for r in rows]
-    refund = [r[2] for r in rows]
-    net_revenue = [r[3] for r in rows]
+    revenue = [int(r[1]) // 10000 for r in rows]
+    refund = [int(r[2]) // 10000 for r in rows]
+    net_revenue = [int(r[3]) // 10000 for r in rows]
 
     plt.figure(figsize=(12, 6))
     plt.plot(dates, revenue, label="Revenue", marker="o", markerfacecolor="none", color="#4C72B0")
     plt.plot(dates, refund, label="Refund", marker="o", markerfacecolor="none", color="#C44E52")
     plt.plot(dates, net_revenue, label="Net Revenue", marker="o", markerfacecolor="none", color="#55A868")
-    plt.title("Daily Revenue / Refund / Net Revenue")
+    plt.title("Daily Revenue")
     plt.xlabel("Date")
-    plt.ylabel("Amount (KRW)")
+    plt.ylabel("Amount (10,000 KRW)")
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.5)
     plt.tight_layout()
