@@ -54,6 +54,11 @@ if __name__ == "__main__":
     logging.info(f"Pipeline started: generating {TOTAL_EVENTS} events")
 
     try:
+        with conn.cursor() as cursor:
+            cursor.execute("TRUNCATE TABLE events")
+        conn.commit()
+        logging.info("Table truncated")
+
         events = [generator.generate(timestamp=random_timestamp()) for _ in range(TOTAL_EVENTS)]
         write_events(conn, events)
         logging.info(f"Pipeline completed: {TOTAL_EVENTS} events written")
