@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS events (
     lecture_id     INT,
     amount         INT,
     payment_method VARCHAR(50),
-    error_properties JSON,
+    error_code     VARCHAR(50),
+    error_page     VARCHAR(100),
     timestamp      DATETIME     NOT NULL,
     ingested_at    DATETIME     DEFAULT CURRENT_TIMESTAMP
 );
