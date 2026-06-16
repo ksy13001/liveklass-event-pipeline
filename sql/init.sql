@@ -1,9 +1,3 @@
-CREATE DATABASE IF NOT EXISTS event_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE event_db;
-
 CREATE TABLE IF NOT EXISTS events (
     id             BIGINT       AUTO_INCREMENT PRIMARY KEY,
     event_id       VARCHAR(36)  NOT NULL UNIQUE,
