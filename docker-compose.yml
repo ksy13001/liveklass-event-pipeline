@@ -25,5 +25,14 @@ services:
       db:
         condition: service_healthy    
 
+  analyzer:
+    build: ./analyzer
+    env_file: .env
+    volumes:
+      - ./charts:/charts
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
-  db_data:                           
+  db_data:
