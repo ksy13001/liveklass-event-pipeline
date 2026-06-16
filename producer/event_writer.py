@@ -14,8 +14,10 @@ INSERT INTO events (
     lecture_id,
     amount,
     payment_method,
+    error_code,
+    error_page,
     timestamp)
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 
@@ -42,6 +44,8 @@ def write_event(conn, event: dict):
                     event["lecture_id"],
                     event["amount"],
                     event["payment_method"],
+                    event.get("error_code"),
+                    event.get("error_page"),
                     event["timestamp"],
                 ),
             )

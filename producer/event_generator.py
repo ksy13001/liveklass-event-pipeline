@@ -8,6 +8,7 @@ class EventType(Enum):
     PAGE_VIEW = "page_view"
     PURCHASE_COMPLETE = "purchase_complete"
     PURCHASE_CANCEL = "purchase_cancel"
+    ERROR = "error"
 
 
 class PaymentMethod(Enum):
@@ -17,12 +18,24 @@ class PaymentMethod(Enum):
     SAMSUNG_PAY = "samsung_pay"
     KAKAO_PAY = "kakao_pay"
     PAYPAL = "paypal"
-
+    
+class ErrorCode(Enum):
+    VIDEO_LOAD_FAILED = "video_load_failed"
+    PAYMENT_FAILED = "payment_failed"
+    AUTH_FAILED = "auth_failed"
+    
+ERROR_PAGES = {
+    ErrorCode.VIDEO_LOAD_FAILED: ["/lectures", "/player"],
+    ErrorCode.PAYMENT_FAILED:    ["/checkout", "/payment"],
+    ErrorCode.AUTH_FAILED:       ["/login", "/mypage"],
+}
+    
 
 EVENT_TYPE_WEIGHTS = {
     EventType.PAGE_VIEW: 70,
-    EventType.PURCHASE_COMPLETE: 25,
+    EventType.PURCHASE_COMPLETE: 20,
     EventType.PURCHASE_CANCEL: 5,
+    EventType.ERROR: 5
 }
 
 MIN_USER_ID = 1
@@ -73,6 +86,8 @@ class EventGenerator:
             return self._purchase_complete_context()
         if event_type == EventType.PURCHASE_CANCEL:
             return self._purchase_cancel_context()
+        if event_type == EventType.ERROR:
+            return self._error_context()
         return self._page_view_context()
 
     def _page_view_context(self) -> dict:
@@ -113,4 +128,17 @@ class EventGenerator:
             "lecture_id": lecture_id,
             "amount": amount,
             "payment_method": payment_method,
+        }
+
+    def _error_context(self) -> dict:
+        error_code = random.choice(list(ErrorCode))
+        error_page = random.choice(ERROR_PAGES[error_code])
+        return {
+            "order_id": None,
+            "user_id": random.randint(MIN_USER_ID, MAX_USER_ID),
+            "lecture_id": None,
+            "amount": None,
+            "payment_method": None,
+            "error_code": error_code.value,
+            "error_page": error_page
         }
