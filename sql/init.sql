@@ -9,6 +9,5 @@ CREATE TABLE IF NOT EXISTS events (
     payment_method VARCHAR(50),
     error_code     VARCHAR(50),
     error_page     VARCHAR(100),
-    timestamp      DATETIME     NOT NULL,
-    ingested_at    DATETIME     DEFAULT CURRENT_TIMESTAMP
+    timestamp      DATETIME     NOT NULL
 );
