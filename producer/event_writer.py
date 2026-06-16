@@ -31,38 +31,28 @@ def connect_db():
     )
 
 
-def write_event(conn, event: dict):
+def to_event_values(event: dict) -> tuple:
+    return (
+        event["event_id"],
+        event["event_type"],
+        event["user_id"],
+        event["order_id"],
+        event["lecture_id"],
+        event["amount"],
+        event["payment_method"],
+        event.get("error_code"),
+        event.get("error_page"),
+        event["timestamp"],
+    )
+
+
+def write_events(conn, events: list[dict]):
+    values_list = [to_event_values(event) for event in events]
     try:
         with conn.cursor() as cursor:
-            cursor.execute(
-                INSERT_QUERY,
-                (
-                    event["event_id"],
-                    event["event_type"],
-                    event["user_id"],
-                    event["order_id"],
-                    event["lecture_id"],
-                    event["amount"],
-                    event["payment_method"],
-                    event.get("error_code"),
-                    event.get("error_page"),
-                    event["timestamp"],
-                ),
-            )
+            cursor.executemany(INSERT_QUERY, values_list)
         conn.commit()
     except Exception as e:
-        logging.error(
-            f"event_write_failed "
-            f"event_id={event['event_id']} "
-            f"event_type={event['event_type']} "
-            f"user_id={event['user_id']} "
-            f"order_id={event['order_id']} "
-            f"lecture_id={event['lecture_id']} "
-            f"amount={event['amount']} "
-            f"payment_method={event['payment_method']} "
-            f"timestamp={event['timestamp']} "
-            f"errno={e.errno} "
-            f"error={e}"
-        )
+        logging.error(f"batch_write_failed count={len(values_list)} error={e}")
         conn.rollback()
         raise
