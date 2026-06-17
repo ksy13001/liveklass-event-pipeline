@@ -32,10 +32,10 @@ ERROR_PAGES = {
     
 
 EVENT_TYPE_WEIGHTS = {
-    EventType.PAGE_VIEW: 70,
+    EventType.PAGE_VIEW: 65,
     EventType.PURCHASE_COMPLETE: 20,
     EventType.PURCHASE_CANCEL: 5,
-    EventType.ERROR: 5
+    EventType.ERROR: 10
 }
 
 MIN_USER_ID = 1
