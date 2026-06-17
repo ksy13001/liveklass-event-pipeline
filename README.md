@@ -21,6 +21,7 @@ cd liveklass-event-pipeline
 docker compose up --build
 ```
 
+로컬 실행 편의를 위해 `.env` 파일을 함께 포함했습니다. 
 실행이 완료되면 `charts/` 폴더가 생성되고 결과를 확인할 수 있습니다.
 
 | 파일                                 | 분석 항목                         |
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS events (
 
 관계형 DB 중에서는 MySQL과 PostgreSQL을 후보로 고민했습니다. PostgreSQL은 대용량 INSERT 성능과 JSONB 지원 면에서 유리할 수 있지만, 이번 과제는 제한된 시간 안에 이벤트 생성·저장·분석·시각화까지 완성하는 것이 중요했습니다. 따라서 제가 더 익숙하게 다룰 수 있는 MySQL을 선택하는 편이 안정적이라고 판단했습니다.
 
-또한 현재 규모에서는 두 DB 간 성능 차이가 실질적으로 크지 않을 것이라고 생각했고, JSON 컬럼도 도입하지 않아 PostgreSQL의 JSONB 장점도 크기 필요하지 않았습니다. 향후 데이터 규모가 커지거나 이벤트 타입별 속성이 다양해져 JSON 저장이 필요해진다면 PostgreSQL 전환을 고려할 것입니다.
+또한 현재 규모에서는 두 DB 간 성능 차이가 실질적으로 크지 않을 것이라고 생각했고, JSON 컬럼도 도입하지 않아 PostgreSQL의 JSONB 장점도 크게 필요하지 않았습니다. 향후 데이터 규모가 커지거나 이벤트 타입별 속성이 다양해져 JSON 저장이 필요해진다면 PostgreSQL 전환을 고려할 것입니다.
 
 ### 이벤트 타입 설계
 
