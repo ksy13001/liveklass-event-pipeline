@@ -51,6 +51,14 @@ DAILY_REVENUE_QUERY = """
     ORDER BY date;
 """
 
+EVENT_TYPE_COLORS = {
+    "page_view":         "#4C72B0",
+    "purchase_complete": "#55A868",
+    "purchase_cancel":   "#C44E52",
+    "error":             "#DD8452",
+}
+
+
 def connect_db():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
@@ -78,7 +86,7 @@ def plot_event_type_count(conn):
     total = sum(counts)
 
     plt.figure(figsize=(10, 6))
-    bars = plt.bar(types, counts, color=["#4C72B0", "#DD8452", "#55A868", "#C44E52"])
+    bars = plt.bar(types, counts, color=[EVENT_TYPE_COLORS[t] for t in types])
     plt.bar_label(bars, labels=[f"{c / total * 100:.1f}%" for c in counts], padding=4)
     plt.title("Event Count by Type")
     plt.xlabel("Event Type")
@@ -100,7 +108,7 @@ def plot_hourly_event_trend(conn):
 
     for event_type, hour_counts in data.items():
         counts = [hour_counts.get(h, 0) for h in hours] 
-        plt.plot(hours, counts, label=event_type, marker="o", markerfacecolor="none")
+        plt.plot(hours, counts, label=event_type, marker="o", markerfacecolor="none", color=EVENT_TYPE_COLORS.get(event_type))
 
     plt.title("Hourly Event Trend")
     plt.xlabel("Hour")
@@ -139,7 +147,7 @@ def plot_daily_event_trend(conn):
 
     for event_type, date_counts in data.items():
         counts = [date_counts.get(d, 0) for d in dates]
-        plt.plot(dates, counts, label=event_type, marker="o", markerfacecolor="none")
+        plt.plot(dates, counts, label=event_type, marker="o", markerfacecolor="none", color=EVENT_TYPE_COLORS.get(event_type))
 
     plt.title("Daily Event Trend")
     plt.xlabel("Date")
