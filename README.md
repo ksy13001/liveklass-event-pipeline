@@ -21,6 +21,7 @@ cd liveklass-event-pipeline
 docker compose up --build
 ```
 
+로컬 실행 편의를 위해 `.env` 파일을 함께 포함했습니다. 
 실행이 완료되면 `charts/` 폴더가 생성되고 결과를 확인할 수 있습니다.
 
 | 파일                                 | 분석 항목                         |
