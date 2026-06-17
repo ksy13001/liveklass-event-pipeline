@@ -54,8 +54,8 @@ DAILY_REVENUE_QUERY = """
 EVENT_TYPE_COLORS = {
     "page_view":         "#4C72B0",
     "purchase_complete": "#55A868",
-    "purchase_cancel":   "#C44E52",
-    "error":             "#DD8452",
+    "purchase_cancel":   "#DD8452",
+    "error":             "#C44E52",
 }
 
 
