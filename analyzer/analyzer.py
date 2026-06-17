@@ -123,6 +123,10 @@ def plot_hourly_event_trend(conn):
 
 def plot_error_code_count(conn):
     rows = execute_query(conn, ERROR_CODE_COUNT_QUERY)
+    if not rows:
+        logging.warning("No error events found, skipping error_code_distribution chart")
+        return
+
     codes = [r[0] for r in rows]
     counts = [r[1] for r in rows]
 
